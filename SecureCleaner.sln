@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SecureCleanerLibrary", "SecureCleanerLibrary\SecureCleanerLibrary.csproj", "{30D0A9E8-A987-41E1-9814-34EBB8148E3A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SecureCleanerLibraryTests", "SecureCleanerLibraryTests\SecureCleanerLibraryTests.csproj", "{F4B1B2BE-B3A1-41A6-A33D-DEA222D28A04}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{30D0A9E8-A987-41E1-9814-34EBB8148E3A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{30D0A9E8-A987-41E1-9814-34EBB8148E3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{30D0A9E8-A987-41E1-9814-34EBB8148E3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{30D0A9E8-A987-41E1-9814-34EBB8148E3A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F4B1B2BE-B3A1-41A6-A33D-DEA222D28A04}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F4B1B2BE-B3A1-41A6-A33D-DEA222D28A04}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F4B1B2BE-B3A1-41A6-A33D-DEA222D28A04}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F4B1B2BE-B3A1-41A6-A33D-DEA222D28A04}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
