@@ -9,10 +9,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5662c927-7e2a-44d6-b40a-2ccf843bb396" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.SecureCleaner/.idea/contentModel.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SecureCleaner/.idea/contentModel.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SecureCleaner/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SecureCleaner/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SecureCleaner.sln.DotSettings.user" beforeDir="false" afterPath="$PROJECT_DIR$/SecureCleaner.sln.DotSettings.user" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SecureCleanerLibrary/UrlCleaner.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SecureCleanerLibrary/UrlCleaner.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SecureCleanerLibraryTests/SecureCleanerTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SecureCleanerLibraryTests/SecureCleanerTests.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -76,6 +73,7 @@
       <workItem from="1599767470019" duration="415000" />
       <workItem from="1599767909636" duration="796000" />
       <workItem from="1599800291485" duration="3340000" />
+      <workItem from="1599804290854" duration="838000" />
     </task>
     <servers />
   </component>

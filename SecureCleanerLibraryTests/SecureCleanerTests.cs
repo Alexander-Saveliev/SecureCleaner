@@ -298,5 +298,44 @@ namespace SecureCleanerLibraryTests
             Assert.Equal(url, cleanedHttpResult.RequestBody);
             Assert.Equal(expectedResult, cleanedHttpResult.ResponseBody);
         }
+        
+        [Fact]
+        public void ClearSecure_ClearHttpResultWithDifferentProperties_HttpResultCleared()
+        {
+            // arrange
+            var url = "http://test.com/users/max/info?pass=123456";
+            var requestBody = "http://test.com?user=max&pass=123456";
+            var responseBody = "http://test.com?user=max&pass=123456";
+
+            var expectedUrlResult = "http://test.com/users/XXX/info?pass=XXXXXX";
+            var expectedRequestBody = "http://test.com?user=XXX&pass=XXXXXX";
+            var expectedResponseBody = "http://test.com?user=XXX&pass=XXXXXX";
+            
+            var secureKey1 = "user";
+            var locations1 = new HashSet<SecureLocationType>() {SecureLocationType.Query};
+            var properties1 = new HashSet<SecurePropertyType>() {SecurePropertyType.RequestBody, SecurePropertyType.ResponseBody};
+            var secureSettings1 = new SecureSettings(secureKey1, locations1, properties1);
+            
+            var secureKey2 = "pass";
+            var locations2 = new HashSet<SecureLocationType>() {SecureLocationType.Query};
+            var properties2 = new HashSet<SecurePropertyType>() {SecurePropertyType.Url, SecurePropertyType.RequestBody, SecurePropertyType.ResponseBody};
+            var secureSettings2 = new SecureSettings(secureKey2, locations2, properties2);
+            
+            var secureKey3 = "users";
+            var locations3 = new HashSet<SecureLocationType>() {SecureLocationType.Rest};
+            var properties3 = new HashSet<SecurePropertyType>() {SecurePropertyType.Url};
+            var secureSettings3 = new SecureSettings(secureKey3, locations3, properties3);
+            
+            var urlCleaner = new SecureCleaner(new List<SecureSettings> {secureSettings1, secureSettings2, secureSettings3});
+            var httpResult = new HttpResult(url, requestBody, responseBody);
+            
+            // act
+            var cleanedHttpResult = urlCleaner.CleanHttpResult(httpResult);
+            
+            // assert
+            Assert.Equal(expectedUrlResult, cleanedHttpResult.Url);
+            Assert.Equal(expectedRequestBody, cleanedHttpResult.RequestBody);
+            Assert.Equal(expectedResponseBody, cleanedHttpResult.ResponseBody);
+        }
     }
 }

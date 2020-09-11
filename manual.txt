@@ -1,0 +1,37 @@
+Использование библиотеки.
+
+Для использования библиотеки необходимо обращаться к классу SecureCleaner. В конструктор необходимо передать настройки Secure-данных. Для очистки данных необходимо воспользоваться свойством CleanHttpResult.
+
+Настройки Secure-данных представляют из себя список настроек для каждого Secure-ключа. Каждая такая настройка имеет имя ключа, множество локаций (ключ типа Rest либо из query) и множество property (url, requestBody, responseBody).
+
+Таким образом можно ограничить процедуру очистки как по property, так и по location. К примеру, используются ключи в query, но в запросе http данный ключ так же присутствует и затирать его не нужно. (http://ex.com/users/pass?pass=qwerty123).
+
+Настройки необходимо указывать для каждого ключа отдельно.  
+
+
+Пример использования.
+
+    var bookingcomHttpResult = HttpResult
+    {
+        Url = "http://test.com/users/max/info?pass=123456",
+        RequestBody = "http://test.com?user=max&pass=123456",
+        ResponseBody = "http://test.com?user=max&pass=123456"
+    };
+
+var secureKey1 = "user";
+var locations1 = new HashSet<SecureLocationType>() {SecureLocationType.Query};
+var properties1 = new HashSet<SecurePropertyType>() {SecurePropertyType.RequestBody, SecurePropertyType.ResponseBody};
+var secureSettings1 = new SecureSettings(secureKey1, locations1, properties1);
+
+var secureKey2 = "pass";
+var locations2 = new HashSet<SecureLocationType>() {SecureLocationType.Query};
+var properties2 = new HashSet<SecurePropertyType>() {SecurePropertyType.Url, SecurePropertyType.RequestBody, SecurePropertyType.ResponseBody};
+var secureSettings2 = new SecureSettings(secureKey2, locations2, properties2);
+
+var secureKey3 = "users";
+var locations3 = new HashSet<SecureLocationType>() {SecureLocationType.Rest};
+var properties3 = new HashSet<SecurePropertyType>() {SecurePropertyType.Url};
+var secureSettings3 = new SecureSettings(secureKey3, locations3, properties3);
+
+var urlCleaner = new SecureCleaner(new List<SecureSettings> {secureSettings1, secureSettings2, secureSettings3});
+var cleanedHttpResult = urlCleaner.CleanHttpResult(httpResult);
