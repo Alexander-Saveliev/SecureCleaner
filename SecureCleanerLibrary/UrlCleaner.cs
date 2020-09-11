@@ -1,5 +1,8 @@
 using System;
+using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
+
+[assembly: InternalsVisibleTo("SecureCleanerLibraryTests")]
 
 namespace SecureCleanerLibrary
 {
@@ -19,7 +22,7 @@ namespace SecureCleanerLibrary
             switch (locationType)
             {
                 case SecureLocationType.Rest:
-                    return new Regex(@$"(?<{KeyGroupName}>/{secureKey}/)(?<{ValueGroupName}>[^/]*)");
+                    return new Regex(@$"(?<{KeyGroupName}>/{secureKey}/)(?<{ValueGroupName}>[^/?]*)");
                 case SecureLocationType.Query:
                     return new Regex($@"(?<{KeyGroupName}>(\?|\&){secureKey}=)(?<{ValueGroupName}>[^\&]*)");
                 default:
