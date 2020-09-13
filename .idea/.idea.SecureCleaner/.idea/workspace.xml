@@ -9,8 +9,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5662c927-7e2a-44d6-b40a-2ccf843bb396" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.SecureCleaner/.idea/contentModel.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SecureCleaner/.idea/contentModel.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SecureCleaner/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SecureCleaner/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SecureCleanerLibraryTests/SecureCleanerTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SecureCleanerLibraryTests/SecureCleanerTests.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,6 +43,7 @@
         <option value="$PROJECT_DIR$/SecureCleanerLibrary/UrlCleaner.cs" />
         <option value="$PROJECT_DIR$/SecureCleanerLibraryTests/UrlCleanerTests.cs" />
         <option value="$PROJECT_DIR$/SecureCleanerLibraryTests/SecureCleanerTests.cs" />
+        <option value="$PROJECT_DIR$/SecureCleanerLibrary/HttpHandler.cs" />
       </list>
     </option>
   </component>
@@ -73,7 +74,10 @@
       <workItem from="1599767470019" duration="415000" />
       <workItem from="1599767909636" duration="796000" />
       <workItem from="1599800291485" duration="3340000" />
-      <workItem from="1599804290854" duration="838000" />
+      <workItem from="1599804290854" duration="1144000" />
+      <workItem from="1599808633429" duration="509000" />
+      <workItem from="1599827865044" duration="643000" />
+      <workItem from="1599934991894" duration="4000" />
     </task>
     <servers />
   </component>
