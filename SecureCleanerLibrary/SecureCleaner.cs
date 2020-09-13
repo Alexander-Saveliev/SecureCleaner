@@ -9,6 +9,7 @@ namespace SecureCleanerLibrary
 
         private List<SecureSettings> _secures;
         private IUrlCleaner _urlCleaner = new UrlCleaner();
+        private IXmlCleaner _xmlCleaner = new XmlCleaner();
 
         public SecureCleaner(List<SecureSettings> secures)
         {
@@ -18,28 +19,50 @@ namespace SecureCleanerLibrary
         public HttpResult CleanHttpResult(HttpResult httpResult)
         {
             const string httpPattern = "http(s)?://([\\w+?\\.\\w+])+([a-zA-Z0-9\\~\\!\\@\\#\\$\\%\\^\\&amp;\\*\\(\\)_\\-\\=\\+\\\\\\/\\?\\.\\:\\;\\'\\,]*)?";
+            const string xmlPattern = "<[^>]*>(<[^>]*/>)*";
             
-            Regex regex = new Regex(httpPattern, RegexOptions.IgnoreCase);
-            var url = regex.Replace(httpResult.Url, ReplaceUrl);
-            var requestBody = regex.Replace(httpResult.RequestBody, ReplaceRequestBody);
-            var responseBody = regex.Replace(httpResult.ResponseBody, ReplaceResponseBody);
+            Regex httpRegex = new Regex(httpPattern, RegexOptions.IgnoreCase);
+            Regex xmlRegex = new Regex(xmlPattern, RegexOptions.IgnoreCase);
+            
+            var url = httpRegex.Replace(httpResult.Url, ReplaceUrlInUrl);
+            var requestBody = httpRegex.Replace(httpResult.RequestBody, ReplaceUrlInRequestBody);
+            var responseBody = httpRegex.Replace(httpResult.ResponseBody, ReplaceUrlInResponseBody);
+            
+            url = xmlRegex.Replace(url, ReplaceXmlInUrl);
+            requestBody = xmlRegex.Replace(requestBody, ReplaceXmlInRequestBody);
+            responseBody = xmlRegex.Replace(responseBody, ReplaceXmlInResponseBody);
             
             return new HttpResult(url, requestBody, responseBody);
         }
 
-        private string ReplaceUrl(Match match)
+        private string ReplaceUrlInUrl(Match match)
         {
             return ReplaceSecureInUrl(match, SecurePropertyType.Url);
         }
 
-        private string ReplaceRequestBody(Match match)
+        private string ReplaceUrlInRequestBody(Match match)
         {
             return ReplaceSecureInUrl(match, SecurePropertyType.RequestBody);
         }
 
-        private string ReplaceResponseBody(Match match)
+        private string ReplaceUrlInResponseBody(Match match)
         {
             return ReplaceSecureInUrl(match, SecurePropertyType.ResponseBody); 
+        }
+        
+        private string ReplaceXmlInUrl(Match match)
+        {
+            return ReplaceSecureInXml(match, SecurePropertyType.Url);
+        }
+
+        private string ReplaceXmlInRequestBody(Match match)
+        {
+            return ReplaceSecureInXml(match, SecurePropertyType.RequestBody);
+        }
+
+        private string ReplaceXmlInResponseBody(Match match)
+        {
+            return ReplaceSecureInXml(match, SecurePropertyType.ResponseBody); 
         }
 
         private string ReplaceSecureInUrl(Match match, SecurePropertyType propertyType)
@@ -55,11 +78,46 @@ namespace SecureCleanerLibrary
                 
                 foreach (var location in secure.Locations)
                 {
-                    cleanedUrl = _urlCleaner.ClearSecure(cleanedUrl, secure.Key, location);
+                    switch (location)
+                    {
+                        case SecureLocationType.UrlRest:
+                            cleanedUrl = _urlCleaner.ClearSecureInRestLocation(cleanedUrl, secure.Key);
+                            break;
+                        case SecureLocationType.UrlQuery:
+                            cleanedUrl = _urlCleaner.ClearSecureInQueryLocation(cleanedUrl, secure.Key);
+                            break;
+                    }
                 }
             }
             
             return cleanedUrl;
+        }
+
+        private string ReplaceSecureInXml(Match match, SecurePropertyType propertyType)
+        {
+            var cleanedXml = match.Value;
+            foreach (var secure in _secures)
+            {
+                if (!secure.Properties.Contains(propertyType))
+                {
+                    continue;
+                }
+
+                foreach (var location in secure.Locations)
+                {
+                    switch (location)
+                    {
+                        case SecureLocationType.XmlElementValue:
+                            cleanedXml = _xmlCleaner.ClearSecureInElementValueLocation(cleanedXml, secure.Key);
+                            break;   
+                        case SecureLocationType.XmlAttribute:
+                            cleanedXml = _xmlCleaner.ClearSecureInAttributeLocation(cleanedXml, secure.Key);
+                            break;
+                    }
+                }
+            }
+
+            return cleanedXml;
         }
     }
 }

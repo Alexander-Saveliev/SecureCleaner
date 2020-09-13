@@ -11,25 +11,20 @@ namespace SecureCleanerLibrary
         private const string KeyGroupName = "Key";
         private const string ValueGroupName = "Value";
         private const char SecureSymbol = 'X';
-        public string ClearSecure(string url, string secureKey, SecureLocationType locationType)
+        
+
+        public string ClearSecureInRestLocation(string url, string secureKey)
         {
-            var regex = BuildRegexByLocationWithKey(locationType, secureKey);
+            var regex = new Regex(@$"(?<{KeyGroupName}>/{secureKey}/)(?<{ValueGroupName}>[^/?]*)");
+            return regex.Replace(url, EncodeSecureData);
+        }
+        
+        public string ClearSecureInQueryLocation(string url, string secureKey)
+        {
+            var regex = new Regex($@"(?<{KeyGroupName}>(\?|\&){secureKey}=)(?<{ValueGroupName}>[^\&]*)");
             return regex.Replace(url, EncodeSecureData);
         }
 
-        private Regex BuildRegexByLocationWithKey(SecureLocationType locationType, string secureKey)
-        {
-            switch (locationType)
-            {
-                case SecureLocationType.Rest:
-                    return new Regex(@$"(?<{KeyGroupName}>/{secureKey}/)(?<{ValueGroupName}>[^/?]*)");
-                case SecureLocationType.Query:
-                    return new Regex($@"(?<{KeyGroupName}>(\?|\&){secureKey}=)(?<{ValueGroupName}>[^\&]*)");
-                default:
-                    throw new NotImplementedException($"SecureLocation: {locationType.ToString()}");
-            }
-        }
-  
         private string EncodeSecureData(Match match)
         {
             var key = match.Groups[$"{KeyGroupName}"];

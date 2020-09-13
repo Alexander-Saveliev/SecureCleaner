@@ -2,7 +2,9 @@ namespace SecureCleanerLibrary
 {
     public enum SecureLocationType
     {
-        Rest,
-        Query
+        UrlRest,
+        UrlQuery,
+        XmlAttribute,
+        XmlElementValue
     }
 }

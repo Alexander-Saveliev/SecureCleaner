@@ -4,6 +4,7 @@ namespace SecureCleanerLibrary
 {
     internal interface IUrlCleaner
     {
-        string ClearSecure(string url, string secureKey, SecureLocationType locationType);
+        string ClearSecureInRestLocation(string url, string secureKey);
+        string ClearSecureInQueryLocation(string url, string secureKey);
     }
 }

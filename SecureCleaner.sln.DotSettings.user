@@ -3,5 +3,6 @@
   &lt;TestAncestor&gt;
     &lt;TestId&gt;xUnit::F4B1B2BE-B3A1-41A6-A33D-DEA222D28A04::.NETCoreApp,Version=v3.1::SecureCleanerLibraryTests.SecureCleanerTests&lt;/TestId&gt;
     &lt;TestId&gt;xUnit::F4B1B2BE-B3A1-41A6-A33D-DEA222D28A04::.NETCoreApp,Version=v3.1::SecureCleanerLibraryTests.UrlCleanerTests&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::F4B1B2BE-B3A1-41A6-A33D-DEA222D28A04::.NETCoreApp,Version=v3.1::SecureCleanerLibraryTests.XmlCleanerTest&lt;/TestId&gt;
   &lt;/TestAncestor&gt;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>
