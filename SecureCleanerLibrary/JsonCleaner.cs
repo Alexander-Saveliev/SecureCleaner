@@ -15,7 +15,7 @@ namespace SecureCleanerLibrary
         
         public string ClearSecureInElementAttributeLocation(string json, string secureKey)
         {
-            var regex = new Regex($@"(?<{BeforeSecureGroupName}>{secureKey}:\s*"")(?<{ValueGroupName}>[^""]*)(?<{AfterSecureGroupName}>"")");
+            var regex = new Regex($@"(?<{BeforeSecureGroupName}>{secureKey}\s*:\s*"")(?<{ValueGroupName}>[^""]*)(?<{AfterSecureGroupName}>"")");
             return regex.Replace(json, EncodeSecureData);
         }
 

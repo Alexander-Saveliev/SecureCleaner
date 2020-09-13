@@ -20,8 +20,8 @@ namespace SecureCleanerLibrary
         public HttpResult CleanHttpResult(HttpResult httpResult)
         {
             const string httpPattern = "http(s)?://([\\w+?\\.\\w+])+([a-zA-Z0-9\\~\\!\\@\\#\\$\\%\\^\\&amp;\\*\\(\\)_\\-\\=\\+\\\\\\/\\?\\.\\:\\;\\'\\,]*)?";
-            const string xmlPattern = "<[^>]*>(<[^>]*/>)*";
-            const string jsonPattern = "{[^}]*}";
+            const string xmlPattern = "<[^>]*>[^<]*(</[^>]*>)*";
+            const string jsonPattern = "([^:]*:\\s*{\\s*value\\s*:\\s*\"[^\"]*\"\\s*})|([^:]*:\\s*\"[^\"]*\")";
             
             Regex httpRegex = new Regex(httpPattern, RegexOptions.IgnoreCase);
             Regex xmlRegex = new Regex(xmlPattern, RegexOptions.IgnoreCase);
@@ -159,8 +159,8 @@ namespace SecureCleanerLibrary
                         case SecureLocationType.JsonElementAttribute:
                             cleanedJson = _jsonCleaner.ClearSecureInElementAttributeLocation(cleanedJson, secure.Key);
                             break;   
-                        case SecureLocationType.XmlAttribute:
-                            cleanedJson = _jsonCleaner.ClearSecureInElementAttributeLocation(cleanedJson, secure.Key);
+                        case SecureLocationType.JsonValueElement:
+                            cleanedJson = _jsonCleaner.ClearSecureInValueElementLocation(cleanedJson, secure.Key);
                             break;
                     }
                 }

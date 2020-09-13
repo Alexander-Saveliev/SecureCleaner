@@ -2,7 +2,7 @@
 
 Для использования библиотеки необходимо обращаться к классу SecureCleaner. В конструктор необходимо передать настройки Secure-данных. Для очистки данных необходимо воспользоваться свойством CleanHttpResult.
 
-Настройки Secure-данных представляют из себя список настроек для каждого Secure-ключа. Каждая такая настройка имеет имя ключа, множество локаций (ключ типа Rest либо из query) и множество property (url, requestBody, responseBody).
+Настройки Secure-данных представляют из себя список настроек для каждого Secure-ключа. Каждая такая настройка имеет имя ключа, множество локаций (UrlRest, UrlQuery, XmlAttribute, XmlElementValue, JsonElementAttribute, JsonValueElement) и множество property (url, requestBody, responseBody).
 
 Таким образом можно ограничить процедуру очистки как по property, так и по location. К примеру, используются ключи в query, но в запросе http данный ключ так же присутствует и затирать его не нужно. (http://ex.com/users/pass?pass=qwerty123).
 
@@ -35,3 +35,52 @@ var secureSettings3 = new SecureSettings(secureKey3, locations3, properties3);
 
 var urlCleaner = new SecureCleaner(new List<SecureSettings> {secureSettings1, secureSettings2, secureSettings3});
 var cleanedHttpResult = urlCleaner.CleanHttpResult(httpResult);
+
+
+Пример использования httpHandler.
+Url: http://test.com/users/max/info
+
+RequestBody: 
+{
+       user : "max",
+       pass : "123456"
+}
+
+ResponseBody:
+{
+       user : {
+             value : "max"
+       },
+       pass : {
+             value : "123456"
+       }
+}
+
+Ключ user содержится в RequestBody и ResponseBody. Имеет локации JsonElementAttribute, JsonValueElement.
+
+var secureKey1 = "user";
+var locations1 = new HashSet<SecureLocationType>() {SecureLocationType.JsonValueElement, SecureLocationType.JsonElementAttribute};
+var properties1 = new HashSet<SecurePropertyType>() {SecurePropertyType.RequestBody, SecurePropertyType.ResponseBody};
+var secureSettings1 = new SecureSettings(secureKey1, locations1, properties1);
+
+Аналогично ключ pass
+
+var secureKey2 = "pass";
+var locations2 = new HashSet<SecureLocationType>() {SecureLocationType.JsonValueElement, SecureLocationType.JsonElementAttribute};
+var properties2 = new HashSet<SecurePropertyType>() {SecurePropertyType.RequestBody, SecurePropertyType.ResponseBody};
+var secureSettings2 = new SecureSettings(secureKey2, locations2, properties2);
+
+Ключ users содержится в url и имеет тип UrlRest
+
+var secureKey3 = "users";
+var locations3 = new HashSet<SecureLocationType>() {SecureLocationType.UrlRest};
+var properties3 = new HashSet<SecurePropertyType>() {SecurePropertyType.Url};
+var secureSettings3 = new SecureSettings(secureKey3, locations3, properties3);
+
+Данные настройки необходимо передать HttpHandler через метод Process.
+
+var httpLogHandler = new HttpHandler();
+var httpHandlerSettings = new List<SecureSettings>() {secureSettings1, secureSettings2, secureSettings3};
+httpLogHandler.Process(url, requestBody, responseBody, httpHandlerSettings);
+
+Доступ к "очищенным" Secure данным осуществляется через CurrentLog у HttpHandler.

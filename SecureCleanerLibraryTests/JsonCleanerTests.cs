@@ -3,7 +3,7 @@ using Xunit;
 
 namespace SecureCleanerLibraryTests
 {
-    public class JsonCleanerTest
+    public class JsonCleanerTests
     {
         [Fact]
         public void ClearSecureInElementAttributeLocation_ClearOneSecureInElementAttributeLocation_OneSecureInElementAttributeLocationShouldBeCleared()
