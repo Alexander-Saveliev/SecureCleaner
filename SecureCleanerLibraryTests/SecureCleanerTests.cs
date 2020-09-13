@@ -381,5 +381,50 @@ namespace SecureCleanerLibraryTests
             // assert
             Assert.Equal(expectedResult, cleanedHttpResult.Url);
         }
+
+        [Fact]
+        public void CleanHttpResult_ClearHttpResultInJson_HttpResultInJsonShoudBeCleared()
+        {
+            var secureKey1 = "user";
+            var secureKey2 = "pass";
+            var locations = new HashSet<SecureLocationType>() {SecureLocationType.JsonElementAttribute};
+            
+            var properties = new HashSet<SecurePropertyType>() {SecurePropertyType.Url};
+            var secureSettings1 = new SecureSettings(secureKey1, locations, properties);
+            var secureSettings2 = new SecureSettings(secureKey2, locations, properties);
+            
+            var secureCleaner = new SecureCleaner(new List<SecureSettings> {secureSettings1, secureSettings2});
+            var httpResult = new HttpResult("Hello {user: \"max\", pass: \"123456\"} World", "", "");
+            var expectedResult = "Hello {user: \"XXX\", pass: \"XXXXXX\"} World";
+            
+            // act
+            var cleanedHttpResult = secureCleaner.CleanHttpResult(httpResult);
+            
+            // assert
+            Assert.Equal(expectedResult, cleanedHttpResult.Url);
+        }
+        
+        [Fact]
+        public void CleanHttpResult_ClearHttpResultInXmlAndJsonAndUrl_HttpResultWithXmlAndJsonAndUrlShouldBeCleared()
+        {
+            // arrange
+            var secureKey1 = "user";
+            var secureKey2 = "pass";
+            var locations = new HashSet<SecureLocationType>() {SecureLocationType.XmlAttribute, SecureLocationType.UrlQuery, SecureLocationType.JsonElementAttribute};
+            
+            var properties = new HashSet<SecurePropertyType>() {SecurePropertyType.Url};
+            var secureSettings1 = new SecureSettings(secureKey1, locations, properties);
+            var secureSettings2 = new SecureSettings(secureKey2, locations, properties);
+            
+            var secureCleaner = new SecureCleaner(new List<SecureSettings> {secureSettings1, secureSettings2});
+            var httpResult = new HttpResult("Hello <auth user=\"max\" pass=\"123456\" link=\"http://test.com?user=max&pass=123456\" info=\"{user: \"max\", pass: \"123456\"}\"> World", "", "");
+            var expectedResult = "Hello <auth user=\"XXX\" pass=\"XXXXXX\" link=\"http://test.com?user=XXX&pass=XXXXXX\" info=\"{user: \"XXX\", pass: \"XXXXXX\"}\"> World";
+            
+            // act
+            var cleanedHttpResult = secureCleaner.CleanHttpResult(httpResult);
+            
+            // assert
+            Assert.Equal(expectedResult, cleanedHttpResult.Url);
+        }
     }
 }

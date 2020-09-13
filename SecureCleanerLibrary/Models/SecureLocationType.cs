@@ -5,6 +5,8 @@ namespace SecureCleanerLibrary
         UrlRest,
         UrlQuery,
         XmlAttribute,
-        XmlElementValue
+        XmlElementValue,
+        JsonElementAttribute,
+        JsonValueElement
     }
 }

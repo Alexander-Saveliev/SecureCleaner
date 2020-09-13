@@ -10,6 +10,7 @@ namespace SecureCleanerLibrary
         private List<SecureSettings> _secures;
         private IUrlCleaner _urlCleaner = new UrlCleaner();
         private IXmlCleaner _xmlCleaner = new XmlCleaner();
+        private IJsonCleaner _jsonCleaner = new JsonCleaner();
 
         public SecureCleaner(List<SecureSettings> secures)
         {
@@ -20,9 +21,11 @@ namespace SecureCleanerLibrary
         {
             const string httpPattern = "http(s)?://([\\w+?\\.\\w+])+([a-zA-Z0-9\\~\\!\\@\\#\\$\\%\\^\\&amp;\\*\\(\\)_\\-\\=\\+\\\\\\/\\?\\.\\:\\;\\'\\,]*)?";
             const string xmlPattern = "<[^>]*>(<[^>]*/>)*";
+            const string jsonPattern = "{[^}]*}";
             
             Regex httpRegex = new Regex(httpPattern, RegexOptions.IgnoreCase);
             Regex xmlRegex = new Regex(xmlPattern, RegexOptions.IgnoreCase);
+            Regex jsonRegex = new Regex(jsonPattern, RegexOptions.IgnoreCase);
             
             var url = httpRegex.Replace(httpResult.Url, ReplaceUrlInUrl);
             var requestBody = httpRegex.Replace(httpResult.RequestBody, ReplaceUrlInRequestBody);
@@ -31,6 +34,10 @@ namespace SecureCleanerLibrary
             url = xmlRegex.Replace(url, ReplaceXmlInUrl);
             requestBody = xmlRegex.Replace(requestBody, ReplaceXmlInRequestBody);
             responseBody = xmlRegex.Replace(responseBody, ReplaceXmlInResponseBody);
+            
+            url = jsonRegex.Replace(url, ReplaceJsonInUrl);
+            requestBody = jsonRegex.Replace(requestBody, ReplaceJsonInRequestBody);
+            responseBody = jsonRegex.Replace(responseBody, ReplaceJsonInResponseBody);
             
             return new HttpResult(url, requestBody, responseBody);
         }
@@ -63,6 +70,21 @@ namespace SecureCleanerLibrary
         private string ReplaceXmlInResponseBody(Match match)
         {
             return ReplaceSecureInXml(match, SecurePropertyType.ResponseBody); 
+        }
+        
+        private string ReplaceJsonInUrl(Match match)
+        {
+            return ReplaceSecureInJson(match, SecurePropertyType.Url);
+        }
+
+        private string ReplaceJsonInRequestBody(Match match)
+        {
+            return ReplaceSecureInJson(match, SecurePropertyType.RequestBody);
+        }
+
+        private string ReplaceJsonInResponseBody(Match match)
+        {
+            return ReplaceSecureInJson(match, SecurePropertyType.ResponseBody); 
         }
 
         private string ReplaceSecureInUrl(Match match, SecurePropertyType propertyType)
@@ -118,6 +140,33 @@ namespace SecureCleanerLibrary
             }
 
             return cleanedXml;
+        }
+        
+        private string ReplaceSecureInJson(Match match, SecurePropertyType propertyType)
+        {
+            var cleanedJson = match.Value;
+            foreach (var secure in _secures)
+            {
+                if (!secure.Properties.Contains(propertyType))
+                {
+                    continue;
+                }
+
+                foreach (var location in secure.Locations)
+                {
+                    switch (location)
+                    {
+                        case SecureLocationType.JsonElementAttribute:
+                            cleanedJson = _jsonCleaner.ClearSecureInElementAttributeLocation(cleanedJson, secure.Key);
+                            break;   
+                        case SecureLocationType.XmlAttribute:
+                            cleanedJson = _jsonCleaner.ClearSecureInElementAttributeLocation(cleanedJson, secure.Key);
+                            break;
+                    }
+                }
+            }
+
+            return cleanedJson;
         }
     }
 }
